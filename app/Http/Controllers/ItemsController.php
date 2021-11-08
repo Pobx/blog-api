@@ -78,7 +78,7 @@ class ItemsController extends Controller
         $entity = Items::find($id);
 
         if (!$entity) {
-          return response()->json(['entity' => $entity], 400);
+          return response()->json(['entity' => null], 204);
         }
 
         $entity->Title = $inputs['Title'];
@@ -97,5 +97,7 @@ class ItemsController extends Controller
     public function destroy($id)
     {
       Flight::destroy($id);
+
+      return response()->json(['entity' => null], 204);
     }
 }
