@@ -22,9 +22,9 @@ $router->get('/key', function() {
 });
 
 $router->get('all', 'ItemsController@index');
-$router->get('show/{id}', 'ItemsController@show');
+$router->get('show/{id:[0-9]+}', 'ItemsController@show');
 $router->post('store', 'ItemsController@store');
-$router->put('update/{id}', 'ItemsController@update');
-$router->delete('destroy/{id}', 'ItemsController@destroy');
+$router->put('update/{id:[0-9]+}', 'ItemsController@update');
+$router->delete('destroy/{id:[0-9]+}', 'ItemsController@destroy');
 
 
