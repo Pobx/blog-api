@@ -22,6 +22,7 @@ $router->get('/key', function() {
 });
 
 $router->get('all', 'ItemsController@index');
+$router->get('show', 'ItemsController@show');
 $router->post('store', 'ItemsController@store');
 $router->put('update/{id}', 'ItemsController@update');
 $router->delete('destroy/{id}', 'ItemsController@destroy');

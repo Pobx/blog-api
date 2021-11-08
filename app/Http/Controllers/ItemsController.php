@@ -47,9 +47,15 @@ class ItemsController extends Controller
      * @param  \App\Models\Items  $items
      * @return \Illuminate\Http\Response
      */
-    public function show(Items $items)
+    public function show($id)
     {
-        //
+      $entity = Items::find($id);
+
+      if (!$entity) {
+        return response()->json(['entity' => null], 204);
+      }
+
+      return response()->json(['entity' => $entity], 200);
 
     }
 
@@ -61,7 +67,6 @@ class ItemsController extends Controller
      */
     public function edit(Items $items)
     {
-        //
         return response()->json(['entity' => $items], 200);
     }
 
@@ -96,7 +101,7 @@ class ItemsController extends Controller
      */
     public function destroy($id)
     {
-      Flight::destroy($id);
+      Items::destroy($id);
 
       return response()->json(['entity' => null], 204);
     }
