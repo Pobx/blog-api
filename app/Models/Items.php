@@ -8,6 +8,7 @@ class Items extends Model
 {
     protected $table = 'items';
     protected $primaryKey = 'BlogId';
+    protected $fillable = ['Title', 'Body'];
 
     public function itemsCollection2()
     {

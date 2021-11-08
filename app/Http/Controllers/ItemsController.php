@@ -26,8 +26,6 @@ class ItemsController extends Controller
     public function create()
     {
         //
-
-        return response()->json(['entity' => 'test'], 200);
     }
 
     /**
@@ -38,7 +36,11 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $inputs = $request->all();
+        $entity = Items::create($inputs);
+
+
+        return response()->json(['entity' => entity], 201);
     }
 
     /**
