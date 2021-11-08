@@ -94,8 +94,8 @@ class ItemsController extends Controller
      * @param  \App\Items  $items
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Items $items)
+    public function destroy($id)
     {
-        //
+      Flight::destroy($id);
     }
 }

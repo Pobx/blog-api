@@ -24,6 +24,6 @@ $router->get('/key', function() {
 $router->get('all', 'ItemsController@index');
 $router->post('store', 'ItemsController@store');
 $router->put('update/{id}', 'ItemsController@update');
-// $router->put('edit', 'ItemsController@edit');
+$router->delete('destroy/{id}', 'ItemsController@destroy');
 
 
