@@ -39,7 +39,7 @@ class ItemsController extends Controller
         $inputs = $request->all();
         $entity = Items::create($inputs);
 
-        return response()->json(['entity' => entity], 201);
+        return response()->json(['entity' => $entity], 201);
     }
 
     /**
