@@ -36,8 +36,7 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs = $request->all();
-        $entity = Items::create($inputs);
+        $entity = Items::create($request->all());
 
         return response()->json(['entity' => $entity], 201);
     }
@@ -74,7 +73,8 @@ class ItemsController extends Controller
      */
     public function update(Request $request, Items $items)
     {
-        //
+        $entity = $items->update($request->all());
+        return response()->json(['entity' => $entity], 200);
     }
 
     /**
