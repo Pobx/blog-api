@@ -81,16 +81,14 @@ class ItemsController extends Controller
     {
         $inputs = $request->all();
         $entity = Items::find($id);
-
+        
         if (!$entity) {
           return response()->json(['entity' => null], 204);
         }
+          
+        $entity->update($inputs);
 
-        $entity->Title = $inputs['Title'];
-        $entity->Body = $inputs['Body'];
-        $entity->save();
-
-        return response()->json(['entity' => $entity], 200);
+        return response()->json(['entity' => $inputs], 200);
     }
 
     /**
