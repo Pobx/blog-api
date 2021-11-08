@@ -62,6 +62,7 @@ class ItemsController extends Controller
     public function edit(Items $items)
     {
         //
+        return response()->json(['entity' => $items], 200);
     }
 
     /**
@@ -71,20 +72,20 @@ class ItemsController extends Controller
      * @param  \App\Models\Items  $items
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Items $items)
+    public function update(Request $request, $id)
     {
         $inputs = $request->all();
-        $items = Items::find($inputs['BlogId']);
+        $entity = Items::find($id);
 
-        if ($items == null) {
-          return response()->json(['entity' => $items], 400);
+        if (!$entity) {
+          return response()->json(['entity' => $entity], 400);
         }
 
-        $items->Title = $inputs['Title'];
-        $items->Body = $inputs['Body'];
-        $items->save();
+        $entity->Title = $inputs['Title'];
+        $entity->Body = $inputs['Body'];
+        $entity->save();
 
-        return response()->json(['entity' => $items], 200);
+        return response()->json(['entity' => $entity], 200);
     }
 
     /**
