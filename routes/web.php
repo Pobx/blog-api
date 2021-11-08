@@ -22,3 +22,4 @@ $router->get('/key', function() {
 });
 
 $router->get('all', 'ItemsController@index');
+$router->post('store', 'ItemsController@store');
