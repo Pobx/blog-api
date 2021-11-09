@@ -3,15 +3,13 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-
-use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -53,31 +51,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-      $response = [
-        'entity'=> null,
-        'messages' => [],
-        'status' => Response::HTTP_INTERNAL_SERVER_ERROR
-      ];
+        $response = [
+            'entity' => null,
+            'messages' => [],
+            'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+        ];
 
+        if ($exception instanceof NotFoundHttpException) {
+            $response['status'] = Response::HTTP_NOT_FOUND;
+            $exception = new NotFoundHttpException('HTTP_NOT_FOUND', $exception);
+        } elseif ($exception instanceof MethodNotAllowedHttpException) {
+            $response['status'] = Response::HTTP_METHOD_NOT_ALLOWED;
+            $exception = new MethodNotAllowedHttpException([], 'HTTP_METHOD_NOT_ALLOWED', $exception);
+        } elseif ($exception instanceof AuthorizationException) {
+            $response['status'] = Response::HTTP_FORBIDDEN;
+            $exception = new AuthorizationException('HTTP_FORBIDDEN', $response['status']);
+        } elseif ($exception instanceof \Dotenv\Exception\ValidationException && $exception->getResponse()) {
+            $response['status'] = Response::HTTP_BAD_REQUEST;
+            $exception = new \Dotenv\Exception\ValidationException('HTTP_BAD_REQUEST', $response['status'], $exception);
+        }
 
-      if ($exception instanceof NotFoundHttpException) {
-        $response['status'] = Response::HTTP_NOT_FOUND;
-        $exception = new NotFoundHttpException('HTTP_NOT_FOUND', $exception); 
-      } elseif ($exception instanceof MethodNotAllowedHttpException) {
-        $response['status'] = Response::HTTP_METHOD_NOT_ALLOWED;
-        $exception = new MethodNotAllowedHttpException([], 'HTTP_METHOD_NOT_ALLOWED', $exception);
-      } elseif ($exception instanceof AuthorizationException) {
-        $response['status'] = Response::HTTP_FORBIDDEN;
-        $exception = new AuthorizationException('HTTP_FORBIDDEN', $response['status']);
-      } elseif ($exception instanceof \Dotenv\Exception\ValidationException && $exception->getResponse()) {
-        $response['status']= Response::HTTP_BAD_REQUEST;
-        $exception = new \Dotenv\Exception\ValidationException('HTTP_BAD_REQUEST', $response['status'], $exception);
-      } 
+        array_push($response['messages'], $exception->getMessage());
 
-      array_push($response['messages'], $exception->getMessage());
-
-      return response()->json($response, $response['status']);
-      // return false;
-      // return parent::render($request, $exception);
+        return response()->json($response, $response['status']);
+        // return false;
+        // return parent::render($request, $exception);
     }
 }
