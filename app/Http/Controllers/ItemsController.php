@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Items;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
 
 class ItemsController extends Controller
 {
@@ -31,10 +32,10 @@ class ItemsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StorePostRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogRequest $request)
     {
         $entity = Items::create($request->all());
 
