@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Items;
 use Illuminate\Http\Request;
-use App\Http\Requests\StorePostRequest;
 
 class ItemsController extends Controller
 {
@@ -20,23 +19,14 @@ class ItemsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePostRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBlogRequest $request)
+    public function store(Request $request)
     {
+        $this->RuleValidate($request);
         $entity = Items::create($request->all());
 
         return response()->json(['entity' => $entity, 'messages' => ['Insert Successfully'], 'status' => 201], 201);
@@ -54,17 +44,6 @@ class ItemsController extends Controller
 
         return response()->json(['entity' => $entity, 'messages' => [], 'status' => 200], 200);
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Items  $items
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Items $items)
-    {
-        return response()->json(['entity' => $items], 200);
     }
 
     /**
@@ -93,5 +72,13 @@ class ItemsController extends Controller
         Items::destroy($id);
 
         return response()->json(['entity' => null, 'messages' => ['Delete Successfully'], 'status' => 200], 200);
+    }
+
+    private function RuleValidate($request)
+    {
+        $this->validate($request, [
+            'Title' => 'required|max:20',
+            'Body' => 'required',
+        ]);
     }
 }

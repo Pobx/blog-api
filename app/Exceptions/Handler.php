@@ -22,7 +22,7 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
         HttpException::class,
         ModelNotFoundException::class,
-        ValidationException::class,
+        // ValidationException::class,
     ];
 
     /**
@@ -69,9 +69,16 @@ class Handler extends ExceptionHandler
         } elseif ($exception instanceof \Dotenv\Exception\ValidationException && $exception->getResponse()) {
             $response['status'] = Response::HTTP_BAD_REQUEST;
             $exception = new \Dotenv\Exception\ValidationException('HTTP_BAD_REQUEST', $response['status'], $exception);
-        }
+        } elseif ($exception instanceof ValidationException) {
+            $errors = $exception->errors();
+            foreach ($errors as $key => $value) {
+                array_push($response['messages'], implode(', ', $value));
+            }
 
-        array_push($response['messages'], $exception->getMessage());
+            $response['status'] = 422;
+        } else {
+            array_push($response['messages'], $exception->getMessage());
+        }
 
         return response()->json($response, $response['status']);
         // return false;
