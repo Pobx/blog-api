@@ -15,7 +15,7 @@ class ItemsController extends Controller
     public function index()
     {
         $entities = Items::all();
-        return response()->json(['entity' => $entities], 200);
+        return response()->json(['entity' => $entities, 'messages' => [], 'status' => 200], 200);
     }
 
     /**
@@ -38,7 +38,7 @@ class ItemsController extends Controller
     {
         $entity = Items::create($request->all());
 
-        return response()->json(['entity' => $entity], 201);
+        return response()->json(['entity' => $entity, 'messages' => ['Insert Successfully'], 'status' => 201], 201);
     }
 
     /**
@@ -49,9 +49,9 @@ class ItemsController extends Controller
      */
     public function show($id)
     {
-      $entity = Items::find($id);
+        $entity = Items::find($id);
 
-      return response()->json(['entity' => $entity], 200);
+        return response()->json(['entity' => $entity, 'messages' => [], 'status' => 200], 200);
 
     }
 
@@ -76,15 +76,9 @@ class ItemsController extends Controller
     public function update(Request $request, $id)
     {
         $inputs = $request->all();
-        $entity = Items::find($id);
-        
-        // if (!$entity) {
-        //   return response()->json(['entity' => null], 204);
-        // }
-          
-        $entity->update($inputs);
+        $entity = Items::find($id)->update($inputs);
 
-        return response()->json(['entity' => $inputs], 200);
+        return response()->json(['entity' => $inputs, 'messages' => ['Update Successfully'], 'status' => 200], 200);
     }
 
     /**
@@ -95,8 +89,8 @@ class ItemsController extends Controller
      */
     public function destroy($id)
     {
-      Items::destroy($id);
+        Items::destroy($id);
 
-      return response()->json(['entity' => null], 204);
+        return response()->json(['entity' => null, 'messages' => ['Delete Successfully'], 'status' => 200], 200);
     }
 }
