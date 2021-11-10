@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Items;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemsController extends Controller
 {
@@ -72,6 +73,21 @@ class ItemsController extends Controller
         Items::destroy($id);
 
         return response()->json(['entity' => null, 'messages' => ['Delete Successfully'], 'status' => 200], 200);
+    }
+
+    public function transaction()
+    {
+        $param = [
+            ["Title" => "Title 1", "Body" => "Body 1"],
+            ["Title" => "Title 2", "Body" => "Body 2"],
+            // ["Title" => "Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3", "Body" => "Body 3"],
+        ];
+
+        $entity = DB::transaction(function ()use ($param) {
+          DB::table('items')->insert($param);
+        });
+        
+        return response()->json(['entity' => $entity, 'messages' => ['Insert Successfully'], 'status' => 201], 201);
     }
 
     private function RuleValidate($request)
