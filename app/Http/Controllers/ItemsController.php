@@ -77,17 +77,18 @@ class ItemsController extends Controller
 
     public function transaction()
     {
+        $datetime = date("Y-m-d H:i:s");
         $param = [
-            ["Title" => "Title 1", "Body" => "Body 1"],
-            ["Title" => "Title 2", "Body" => "Body 2"],
-            // ["Title" => "Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3", "Body" => "Body 3"],
+            ["Title" => "Title 1", "Body" => "Body 1", "created_at" => $datetime, "updated_at" => $datetime],
+            ["Title" => "Title 2", "Body" => "Body 2", "created_at" => $datetime, "updated_at" => $datetime],
+            // ["Title" => "Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3", "Body" => "Body 3", "created_at" => $datetime, "updated_at" => $datetime],
         ];
 
-        $entity = DB::transaction(function ()use ($param) {
-          DB::table('items')->insert($param);
+        DB::transaction(function () use ($param) {
+            DB::table('items')->insert($param);
         });
-        
-        return response()->json(['entity' => $entity, 'messages' => ['Insert Successfully'], 'status' => 201], 201);
+
+        return response()->json(['entity' => $param, 'messages' => ['Insert Successfully'], 'status' => 201], 201);
     }
 
     private function RuleValidate($request)
