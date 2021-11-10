@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Items;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ItemsController extends Controller
 {
@@ -75,14 +77,17 @@ class ItemsController extends Controller
         return response()->json(['entity' => null, 'messages' => ['Delete Successfully'], 'status' => 200], 200);
     }
 
-    public function transaction()
+    public function transaction(Request $request)
     {
+        $this->RuleValidateTransaction($request);
         $datetime = date("Y-m-d H:i:s");
-        $param = [
-            ["Title" => "Title 1", "Body" => "Body 1", "created_at" => $datetime, "updated_at" => $datetime],
-            ["Title" => "Title 2", "Body" => "Body 2", "created_at" => $datetime, "updated_at" => $datetime],
-            // ["Title" => "Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3", "Body" => "Body 3", "created_at" => $datetime, "updated_at" => $datetime],
-        ];
+        // $param = $request->all();
+        $param = $request->input('entites');
+        // $param = [
+        //     ["Title" => "Title 1", "Body" => "Body 1", "created_at" => $datetime, "updated_at" => $datetime],
+        //     ["Title" => "Title 2", "Body" => "Body 2", "created_at" => $datetime, "updated_at" => $datetime],
+        //     ["Title" => "Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3", "Body" => "Body 3", "created_at" => $datetime, "updated_at" => $datetime],
+        // ];
 
         DB::transaction(function () use ($param) {
             DB::table('items')->insert($param);
@@ -97,5 +102,18 @@ class ItemsController extends Controller
             'Title' => 'required|max:20',
             'Body' => 'required',
         ]);
+    }
+
+    private function RuleValidateTransaction($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'entites.*.Title' => 'required|max:20',
+            'entites.*.Body' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+          $errors = $validator->errors();
+          throw ValidationException::withMessages($errors->all());
+        }
     }
 }
