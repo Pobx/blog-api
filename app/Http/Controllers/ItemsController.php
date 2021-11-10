@@ -81,13 +81,7 @@ class ItemsController extends Controller
     {
         $this->RuleValidateTransaction($request);
         $datetime = date("Y-m-d H:i:s");
-        // $param = $request->all();
         $param = $request->input('entites');
-        // $param = [
-        //     ["Title" => "Title 1", "Body" => "Body 1", "created_at" => $datetime, "updated_at" => $datetime],
-        //     ["Title" => "Title 2", "Body" => "Body 2", "created_at" => $datetime, "updated_at" => $datetime],
-        //     ["Title" => "Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3Title 3", "Body" => "Body 3", "created_at" => $datetime, "updated_at" => $datetime],
-        // ];
 
         DB::transaction(function () use ($param) {
             DB::table('items')->insert($param);
